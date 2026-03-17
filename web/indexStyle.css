@@ -1,0 +1,68 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Mar 17, 2026, 9:22:56 PM
+    Author     : RESPOW MGOTSI
+*/
+
+/* style.css */
+
+/* Full page body */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1531219432768-9ae487545f12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Container for the welcome card */
+.welcome-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* The white card */
+.welcome-card {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 50px;
+    border-radius: 15px;
+    width: 60%;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Heading */
+.welcome-card h1 {
+    font-size: 50px;
+    color: #1abc9c;
+    text-shadow: 2px 2px 5px #2c3e50;
+}
+
+/* Paragraph */
+.welcome-card p {
+    font-size: 22px;
+    color: #34495e;
+    text-shadow: 1px 1px 3px #ccc;
+}
+
+/* Button */
+.welcome-card button {
+    margin-top: 25px;
+    padding: 15px 35px;
+    font-size: 18px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
+}

@@ -1,0 +1,97 @@
+/* Full page body */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1531219432768-9ae487545f12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Container for login card */
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* The white card */
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Heading */
+.login-card h2 {
+    font-size: 28px;
+    color: #2980b9;
+    text-shadow: 1px 1px 2px #bdc3c7;
+}
+
+/* Input fields */
+.login-card input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Login buttons */
+.login-card button {
+    padding: 12px;
+    margin: 8px 0;
+    width: 90%;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease; /* smooth transition for glow */
+}
+
+/* Button colors by ID */
+#studentBtn {
+    background-color: #8e44ad; /* vibrant purple */
+}
+
+#mentorBtn {
+    background-color: #16a085; /* teal */
+}
+
+#lecturerBtn {
+    background-color: #d35400; /* warm orange */
+}
+
+/* Glow effect on hover */
+#studentBtn:hover {
+    box-shadow: 0 0 15px #8e44ad, 0 0 25px #8e44ad;
+}
+
+#mentorBtn:hover {
+    box-shadow: 0 0 15px #16a085, 0 0 25px #16a085;
+}
+
+#lecturerBtn:hover {
+    box-shadow: 0 0 15px #d35400, 0 0 25px #d35400;
+}
+
+/* Register link */
+.login-card p {
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.login-card p a {
+    color: #2980b9;
+    font-weight: bold;
+    text-decoration: none;
+}
