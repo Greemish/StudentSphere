@@ -28,7 +28,16 @@
 
                 <label for="phone_number">Phone Number</label>
                 <input type="text" id="phone_number" name="phone_number">
-
+                
+                <div class="terms">
+                     
+                        <label for="terms">
+                            <input  style="width: 10px;margin-left:50px " type="checkbox" id="terms" name="terms" required>
+                         I agree to the 
+                         <a href="terms.jsp" target="_blank">Terms and Conditions</a>
+                          </label>
+                 </div>
+                
                 <button type="submit" id="signupBtn">Sign Up</button>
             </form>
             <p class="login-link">
