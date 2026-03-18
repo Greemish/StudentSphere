@@ -50,7 +50,7 @@ public class StudentLoginServlet extends HttpServlet {
             if (rs.next()) {
                 // Student found - login successful
                 HttpSession session = request.getSession();
-                session.setAttribute("student_number", rs.getString("student_number"));
+                session.setAttribute("student_number", rs.getInt("student_number")); // <-- FIXED
                 session.setAttribute("name", rs.getString("name"));
                 session.setAttribute("surname", rs.getString("surname"));
                 session.setAttribute("email", rs.getString("email"));
