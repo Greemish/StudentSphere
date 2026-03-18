@@ -20,13 +20,15 @@ public class ModuleMessagesServlet extends HttpServlet {
 
         try (Connection conn = DBConnection.getConnection()) {
 
-            String sql = "SELECT content FROM messages WHERE moduleid = ?";
+            String sql = "SELECT content FROM messages WHERE moduleid =\"?\"";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, moduleId);
+            ps.setString(1, moduleId.toUpperCase());
             
 
             ResultSet rs = ps.executeQuery();
-
+            for (int i = 0; i < 10; i++) {
+                messages.add("HERE IS YOUR MESSAGE");
+            }
             while (rs.next()) {
                 messages.add(rs.getString("content"));
             }
@@ -35,8 +37,8 @@ public class ModuleMessagesServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        request.setAttribute("messages", messages);
-        request.setAttribute("moduleId", moduleId);
+        session.setAttribute("messages", messages);
+        session.setAttribute("moduleId", moduleId);
 
         RequestDispatcher rd = request.getRequestDispatcher("moduleMessages.jsp");
         rd.forward(request, response);

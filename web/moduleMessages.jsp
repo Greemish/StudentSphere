@@ -26,7 +26,7 @@
 <h2>Messages for Module: ${moduleId}</h2>
 
 <%
-    List<String> messages = (List<String>) request.getAttribute("messages");
+    List<String> messages = (List<String>) session.getAttribute("messages");
 
     if (messages != null && !messages.isEmpty()) {
         for (String msg : messages) {
