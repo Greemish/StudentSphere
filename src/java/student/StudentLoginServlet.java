@@ -60,7 +60,7 @@ public class StudentLoginServlet extends HttpServlet {
                 session.setMaxInactiveInterval(30 * 60);
                 
                 // Redirect to student dashboard
-                response.sendRedirect("studentDashboard.jsp");
+                response.sendRedirect("DashboardServlet");
                 
             } else {
                 // Student not found - login failed

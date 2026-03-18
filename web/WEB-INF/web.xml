@@ -8,6 +8,14 @@
         <servlet-name>StudentLoginServlet</servlet-name>
         <servlet-class>student.StudentLoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>student.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleMessagesServlet</servlet-name>
+        <servlet-class>student.ModuleMessagesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/SignupServlet</url-pattern>
@@ -15,5 +23,13 @@
     <servlet-mapping>
         <servlet-name>StudentLoginServlet</servlet-name>
         <url-pattern>/StudentLoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/DashboardServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleMessagesServlet</servlet-name>
+        <url-pattern>/ModuleMessagesServlet</url-pattern>
     </servlet-mapping>
 </web-app>
