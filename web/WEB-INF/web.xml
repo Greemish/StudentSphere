@@ -16,6 +16,26 @@
         <servlet-name>ModuleMessagesServlet</servlet-name>
         <servlet-class>student.ModuleMessagesServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>lecturerLoginServlett</servlet-name>
+        <servlet-class>lecturer.lecturerLoginServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LectureDashboardServlett</servlet-name>
+        <servlet-class>lecturer.LectureDashboardServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleContentServlett</servlet-name>
+        <servlet-class>lecturer.ModuleContentServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadContentServlett</servlet-name>
+        <servlet-class>lecturer.UploadContentServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteContentServlett</servlet-name>
+        <servlet-class>lecturer.DeleteContentServlett</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/SignupServlet</url-pattern>
@@ -31,5 +51,65 @@
     <servlet-mapping>
         <servlet-name>ModuleMessagesServlet</servlet-name>
         <url-pattern>/ModuleMessagesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteContentServlet</servlet-name>
+        <servlet-class>lecturer.DeleteContentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteContentServlet</servlet-name>
+        <url-pattern>/deleteContent</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LectureDashboardServlet</servlet-name>
+        <servlet-class>lecturer.LectureDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LectureDashboardServlet</servlet-name>
+        <url-pattern>/lectureDashboard</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ModuleContentServlet</servlet-name>
+        <servlet-class>lecturer.ModuleContentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ModuleContentServlet</servlet-name>
+        <url-pattern>/moduleContent</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UploadContentServlet</servlet-name>
+        <servlet-class>lecturer.UploadContentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadContentServlet</servlet-name>
+        <url-pattern>/uploadContent</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>lecturerLoginServlet</servlet-name>
+        <servlet-class>lecturer.lecturerLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>lecturerLoginServlet</servlet-name>
+        <url-pattern>/lecturerLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>lecturerLoginServlett</servlet-name>
+        <url-pattern>/lecturerLoginServlett</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LectureDashboardServlett</servlet-name>
+        <url-pattern>/LectureDashboardServlett</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleContentServlett</servlet-name>
+        <url-pattern>/ModuleContentServlett</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadContentServlett</servlet-name>
+        <url-pattern>/UploadContentServlett</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteContentServlett</servlet-name>
+        <url-pattern>/DeleteContentServlett</url-pattern>
     </servlet-mapping>
 </web-app>

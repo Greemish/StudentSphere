@@ -31,9 +31,9 @@
           
             
 
-        <p>Don’t have an account? <a href="register.jsp">Register here</a></p>
+        <p>Don’t have an account? <a href="register.jsp">Register here</a></p>   
     </div>
-
+     
 </div>
 
 </body>
