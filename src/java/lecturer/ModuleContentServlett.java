@@ -55,7 +55,7 @@ public class ModuleContentServlett extends HttpServlet {
         request.setAttribute("contentList", contentList);
         request.setAttribute("currentModuleId", moduleId);
         
-        RequestDispatcher rd = request.getRequestDispatcher("moduleContent.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("moduleHome.jsp");
         rd.forward(request, response);
     }
 }

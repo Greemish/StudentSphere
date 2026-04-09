@@ -36,6 +36,10 @@
         <servlet-name>DeleteContentServlett</servlet-name>
         <servlet-class>lecturer.DeleteContentServlett</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateAnnouncementServlet</servlet-name>
+        <servlet-class>lecturer.CreateAnnouncementServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/SignupServlet</url-pattern>
@@ -111,5 +115,9 @@
     <servlet-mapping>
         <servlet-name>DeleteContentServlett</servlet-name>
         <url-pattern>/DeleteContentServlett</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateAnnouncementServlet</servlet-name>
+        <url-pattern>/CreateAnnouncementServlet</url-pattern>
     </servlet-mapping>
 </web-app>
