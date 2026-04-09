@@ -15,7 +15,7 @@
         <form action="StudentLoginServlet" method="post">
 
            
-            <input type="text" name="student_number" placeholder="Username" required>
+            <input type="text" name="student_number" placeholder="Student Number" required>
             <input type="password" name="password" placeholder="Password" required>
 
             <button type="submit" name="value="student" id="studentBtn">Student Login</button>
