@@ -18,26 +18,19 @@ public class CreateAnnouncementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Read form parameters
         String moduleId = request.getParameter("moduleid");
         String heading = request.getParameter("title");
         String announcementText = request.getParameter("message");
 
-        // Basic validation
         if (moduleId == null || moduleId.isBlank()
                 || heading == null || heading.isBlank()
                 || announcementText == null || announcementText.isBlank()) {
 
-            response.sendRedirect(
-                "moduleHome.jsp?moduleid=" + moduleId + "&error=missing"
-            );
+            response.sendRedirect("moduleHome.jsp?moduleid=" + moduleId + "&error=missing");
             return;
         }
 
-        //  SQL (id + created_at handled by DB)
-        String sql = "INSERT INTO announcements (moduleid, heading, announcement)"
-                + "VALUES (?, ?, ?)";
-                
+        String sql = "INSERT INTO module_announcements (moduleid, heading, anouncement) VALUES (?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -52,7 +45,6 @@ public class CreateAnnouncementServlet extends HttpServlet {
             throw new ServletException("Failed to create announcement", e);
         }
 
-        // Redirect back to module home (prevents resubmission)
         response.sendRedirect("moduleHome.jsp?moduleid=" + moduleId);
     }
 }

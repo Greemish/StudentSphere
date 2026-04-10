@@ -166,12 +166,11 @@
             <span style="color:#95a5a6;">Announcements</span>
         </div>
 
-        <!-- Form -->
-        <form action="CreateAnnouncementServlet"
-              method="post"
-              enctype="multipart/form-data">
+        <!-- ✅ FIXED FORM -->
+        <form action="CreateAnnouncementServlet" method="post">
 
-            <input type="hidden" name="moduleid" value="${currentModuleId}" />
+            <!-- 🔥 FIX: Use URL parameter instead of null attribute -->
+            <input type="hidden" name="moduleid" value="${param.moduleid}" />
 
             <!-- Title -->
             <div style="margin-bottom:20px;">
@@ -195,22 +194,6 @@
                           required
                           placeholder="Write the announcement message here..."
                           style="width:100%; padding:14px; border-radius:8px; border:1px solid #ccc; resize:vertical;"></textarea>
-            </div>
-
-            <!-- Attachments -->
-            <div style="margin-bottom:30px;">
-                <label style="font-weight:600; display:block; margin-bottom:8px;">
-                    Optional Attachments
-                </label>
-                <div style="background:#f8f9fa; padding:15px; border-radius:8px; border:1px dashed #ccc;">
-                    <input type="file"
-                           name="attachments"
-                           multiple
-                           accept=".pdf,.doc,.docx,image/*">
-                    <p style="margin:8px 0 0; font-size:0.85rem; color:#7f8c8d;">
-                        You may attach documents or images related to this announcement
-                    </p>
-                </div>
             </div>
 
             <!-- Actions -->
