@@ -1,75 +1,66 @@
 <%@ page import="java.util.*" %>
+<%
+    String studentNumber = (String) session.getAttribute("studentNumber");
+    if (studentNumber == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    List<Map<String, String>> messages = (List<Map<String, String>>) request.getAttribute("messages");
+    List<Map<String, String>> tutors = (List<Map<String, String>>) request.getAttribute("tutors");
+    Integer moduleId = (Integer) request.getAttribute("moduleId");
+%>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Module Messages & Tutors</title>
+    <title>Module Messages</title>
+    <link rel="stylesheet" href="dashboardStyle.css">
     <style>
-        body { font-family: Arial; padding: 20px; background: #f4f6f9; }
-        .container { display: flex; gap: 30px; }
-        .messages, .tutors { padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
-        .messages { flex: 2; max-height: 600px; overflow-y: auto; }
-        .tutors { flex: 1; max-height: 600px; overflow-y: auto; }
-        .message { padding: 10px; border-bottom: 1px solid #eee; margin-bottom: 8px; }
-        .message:last-child { border-bottom: none; }
-        .tutor { margin-bottom: 10px; }
-        textarea { width: 100%; padding: 8px; margin-top: 8px; border-radius: 5px; border: 1px solid #ccc; }
-        button { margin-top: 8px; padding: 6px 12px; border-radius: 5px; border: none; background: #1e3c72; color: #fff; cursor: pointer; }
+        .back-btn { position: fixed; top: 1rem; left: 1rem; background: #333; color: white; padding: 0.3rem 0.8rem; text-decoration: none; border-radius: 0.5rem; font-size: 0.8rem; z-index: 100; }
+        .back-btn:hover { background: #555; }
     </style>
 </head>
 <body>
-    <h2>Module: <%= request.getAttribute("moduleId") %></h2>
-    <div class="container">
+<a href="#" class="back-btn" onclick="history.back();return false;"> < Back</a>
+<div class="sidebar">
+    <h2>Student Panel</h2>
+    <a href="ModuleServlet">Dashboard</a>
+    <a href="TakeQuizServlet">Take Quiz</a>
+    <a href="AdaptiveQuizServlet">Adaptive Quiz</a>
+    <a href="profile.jsp">Profile</a>
+    <a href="LogoutServlet">Logout</a>
+</div>
+<div class="main-content">
+    <h2>Module Discussion</h2>
+    <h3>Tutors:</h3>
+    <% if (tutors != null && !tutors.isEmpty()) { %>
+        <ul>
+        <% for (Map<String, String> t : tutors) { %>
+            <li><%= t.get("name") %> (<%= t.get("email") %>)</li>
+        <% } %>
+        </ul>
+    <% } else { %>
+        <p>No tutors assigned.</p>
+    <% } %>
 
-        <!-- Messages Section -->
-        <div class="messages">
-            <h3>Messages</h3>
-            <%
-                List<Map<String,String>> messages = (List<Map<String,String>>) request.getAttribute("messages");
-                if (messages != null && !messages.isEmpty()) {
-                    for (Map<String,String> msg : messages) {
-            %>
-                        <div class="message">
-                            <strong>Student: <%= msg.get("student") %></strong> | <em><%= msg.get("time") %></em>
-                            <p><%= msg.get("content") %></p>
-                        </div>
-            <%
-                    }
-                } else {
-            %>
-                    <p>No messages found.</p>
-            <%
-                }
-            %>
+    <h3>Messages:</h3>
+    <% if (messages != null && !messages.isEmpty()) { %>
+        <% for (Map<String, String> msg : messages) { %>
+            <div style="border:1px solid #ccc; margin:10px 0; padding:10px; border-radius:5px;">
+                <strong>Student: <%= msg.get("student_number") %></strong>
+                <small><%= msg.get("created_at") %></small>
+                <p><%= msg.get("content") %></p>
+            </div>
+        <% } %>
+    <% } else { %>
+        <p>No messages yet. Be the first to ask!</p>
+    <% } %>
 
-            <!-- Send new message -->
-            <form action="ModuleMessagesServlet" method="post">
-                <input type="hidden" name="moduleid" value="<%= request.getAttribute("moduleId") %>">
-                <textarea name="content" rows="3" placeholder="Type your message..." required></textarea>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-
-        <!-- Tutors Section -->
-        <div class="tutors">
-            <h3>Tutors</h3>
-            <%
-                List<Map<String,String>> tutors = (List<Map<String,String>>) request.getAttribute("tutors");
-                if (tutors != null && !tutors.isEmpty()) {
-                    for (Map<String,String> t : tutors) {
-            %>
-                        <div class="tutor">
-                            <strong><%= t.get("name") %></strong><br>
-                            <em><%= t.get("email") %></em>
-                        </div>
-            <%
-                    }
-                } else {
-            %>
-                    <p>No tutors assigned to this module.</p>
-            <%
-                }
-            %>
-        </div>
-
-    </div>
+    <h3>Post a New Message</h3>
+    <form action="ModuleMessagesServlet" method="post">
+        <input type="hidden" name="moduleid" value="<%=moduleId %>">
+        <textarea name="content" rows="3" cols="50" required></textarea><br>
+        <button type="submit">Send</button>
+    </form>
+</div>
 </body>
 </html>

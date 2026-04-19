@@ -1,109 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package student;
 
 import java.sql.Connection;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import jakarta.servlet.annotation.WebServlet;
 
-/**
- *
- * @author RESPOW MGOTSI
- */
+@WebServlet("/SignupServlet")
 public class SignupServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Get parameters from signup form
-        int studentNumber = Integer.parseInt(request.getParameter("student_number"));
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String phoneNumber = request.getParameter("phone_number");
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            // Get database connection
-            conn = DBConnection.getConnection();
-
-            // SQL query to insert new student
-            String sql = "INSERT INTO student (student_number, name, surname, email, password, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
-
-            ps = conn.prepareStatement(sql);
-
-            // Set parameters
-            ps.setInt(1, studentNumber);
-            ps.setString(2, name);
-            ps.setString(3, surname);
-            ps.setString(4, email);
-            ps.setString(5, password); // Note: In production, hash the password!
-            ps.setString(6, phoneNumber);
-
-            // Execute the insert
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                // Send values to JSP confirmation page
-                request.setAttribute("studentNumber", studentNumber);
-                request.setAttribute("name", name);
-                request.setAttribute("surname", surname);
-                request.setAttribute("email", email);
-                request.setAttribute("message", "Signup successful! Please login.");
-
-                RequestDispatcher disp = request.getRequestDispatcher("login.jsp");
-                disp.forward(request, response);
-            } else {
-                // Handle failed insert
-                request.setAttribute("error", "Signup failed. Please try again.");
-                RequestDispatcher disp = request.getRequestDispatcher("failedSignup.jsp");
-                disp.forward(request, response);
-            }
-
-        } catch (Exception e) {
-           
-
-             e.printStackTrace();
-
-            PrintWriter out = response.getWriter();
-            out.println("<h1 style= \"color:red \">Database Error</h1>");
-            out.println("<h2>" + e.getMessage() + "</h2>");
-
-//            RequestDispatcher disp = request.getRequestDispatcher("failedSignup.jsp");
-//            disp.forward(request, response);
-
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
     @Override
@@ -112,6 +27,148 @@ public class SignupServlet extends HttpServlet {
         processRequest(request, response);
     }
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
+        HttpSession session = request.getSession();
 
+        // CSRF protection (optional)
+        String sessionToken = (String) session.getAttribute("csrfToken");
+        String requestToken = request.getParameter("csrfToken");
+        if (sessionToken != null && !sessionToken.equals(requestToken)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
+            return;
+        }
+
+        // Get parameters
+        String studentNumberStr = request.getParameter("student_number");
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phoneNumber = request.getParameter("phone_number");
+        String codeInput = request.getParameter("verification_code");
+
+        // ========== VALIDATIONS ==========
+
+        // 1. Email domain
+        if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@tut4life\\.ac\\.za$")) {
+            request.setAttribute("error", "Email must end with @tut4life.ac.za");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        // 2. Phone number (exactly 10 digits)
+        if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
+            request.setAttribute("error", "Phone number must be exactly 10 digits");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        // 3. Name & surname (no digits)
+        if (!name.matches("[A-Za-z\\s\\-']+") || !surname.matches("[A-Za-z\\s\\-']+")) {
+            request.setAttribute("error", "Name and surname cannot contain digits");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+     // 4. Student number: exactly 9 digits
+if (studentNumberStr == null || !studentNumberStr.matches("\\d{9}")) {
+    request.setAttribute("error", "Student number must be exactly 9 digits");
+    request.getRequestDispatcher("register.jsp").forward(request, response);
+    return;
+}
+
+// 5. Student number must match email prefix (first 9 digits of email)
+String emailPrefix = email.split("@")[0];
+if (!emailPrefix.matches("\\d{9}")) {
+    request.setAttribute("error", "Your email prefix must be exactly 9 digits (e.g., 123456789@tut4life.ac.za)");
+    request.getRequestDispatcher("register.jsp").forward(request, response);
+    return;
+}
+if (!studentNumberStr.equals(emailPrefix)) {
+    request.setAttribute("error", "Student number must match the first 9 digits of your email. Expected: " + emailPrefix);
+    request.getRequestDispatcher("register.jsp").forward(request, response);
+    return;
+}
+        // Verify code from database
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean codeValid = false;
+        try {
+            conn = DBConnection.getConnection();
+            String sql = "SELECT code FROM verification_codes WHERE email = ? AND used = FALSE ORDER BY created_at DESC LIMIT 1";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String dbCode = rs.getString("code");
+                if (dbCode.equals(codeInput)) {
+                    codeValid = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Database error during verification");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+
+        if (!codeValid) {
+            request.setAttribute("error", "Invalid or expired verification code");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        // Insert student (student_number stored as VARCHAR or BIGINT – using String here)
+        Connection conn2 = null;
+        PreparedStatement psInsert = null;
+        PreparedStatement psUpdate = null;
+        try {
+            conn2 = DBConnection.getConnection();
+            conn2.setAutoCommit(false);
+
+            // Note: student_number is stored as VARCHAR(13) in the database
+            String insertSql = "INSERT INTO student (student_number, name, surname, email, password, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
+            psInsert = conn2.prepareStatement(insertSql);
+            psInsert.setString(1, studentNumberStr);   // now String, not int
+            psInsert.setString(2, name);
+            psInsert.setString(3, surname);
+            psInsert.setString(4, email);
+            psInsert.setString(5, password);
+            psInsert.setString(6, phoneNumber);
+            int rows = psInsert.executeUpdate();
+
+            if (rows > 0) {
+                String updateSql = "UPDATE verification_codes SET used = TRUE WHERE email = ? AND code = ?";
+                psUpdate = conn2.prepareStatement(updateSql);
+                psUpdate.setString(1, email);
+                psUpdate.setString(2, codeInput);
+                psUpdate.executeUpdate();
+
+                conn2.commit();
+                session.removeAttribute("signupEmail");
+                request.setAttribute("message", "Signup successful! Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            } else {
+                conn2.rollback();
+                request.setAttribute("error", "Signup failed. Please try again.");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            try { if (conn2 != null) conn2.rollback(); } catch (Exception ex) {}
+            request.setAttribute("error", "Database error: " + e.getMessage());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        } finally {
+            try { if (psInsert != null) psInsert.close(); } catch (Exception e) {}
+            try { if (psUpdate != null) psUpdate.close(); } catch (Exception e) {}
+            try { if (conn2 != null) conn2.close(); } catch (Exception e) {}
+        }
+    }
 }

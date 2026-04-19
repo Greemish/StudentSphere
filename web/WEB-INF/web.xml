@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>SignupServlet</servlet-name>
-        <servlet-class>student.SignupServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>StudentLoginServlet</servlet-name>
         <servlet-class>student.StudentLoginServlet</servlet-class>
     </servlet>
@@ -40,10 +36,30 @@
         <servlet-name>CreateAnnouncementServlet</servlet-name>
         <servlet-class>lecturer.CreateAnnouncementServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>SignupServlet</servlet-name>
-        <url-pattern>/SignupServlet</url-pattern>
-    </servlet-mapping>
+    <servlet>
+        <servlet-name>AdaptiveQuizServlet</servlet-name>
+        <servlet-class>student.AdaptiveQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleServlet</servlet-name>
+        <servlet-class>student.ModuleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitAdaptiveQuizServlet</servlet-name>
+        <servlet-class>student.SubmitAdaptiveQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TakeQuizServlet</servlet-name>
+        <servlet-class>student.TakeQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StartQuizServlet</servlet-name>
+        <servlet-class>student.StartQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitQuizServlet</servlet-name>
+        <servlet-class>student.SubmitQuizServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentLoginServlet</servlet-name>
         <url-pattern>/StudentLoginServlet</url-pattern>
@@ -119,5 +135,29 @@
     <servlet-mapping>
         <servlet-name>CreateAnnouncementServlet</servlet-name>
         <url-pattern>/CreateAnnouncementServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdaptiveQuizServlet</servlet-name>
+        <url-pattern>/AdaptiveQuizServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleServlet</servlet-name>
+        <url-pattern>/ModuleServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitAdaptiveQuizServlet</servlet-name>
+        <url-pattern>/SubmitAdaptiveQuizServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TakeQuizServlet</servlet-name>
+        <url-pattern>/TakeQuizServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StartQuizServlet</servlet-name>
+        <url-pattern>/StartQuizServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitQuizServlet</servlet-name>
+        <url-pattern>/SubmitQuizServlet</url-pattern>
     </servlet-mapping>
 </web-app>

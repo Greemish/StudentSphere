@@ -1,0 +1,107 @@
+.chatgpt-btn {
+    display: inline-block;
+    background: #10a37f;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.chatgpt-btn:hover {
+    background: #0e8a6c;
+    transform: scale(1.02);
+}
+/* studentDashboardStyle.css - Student Dashboard */
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #eef2f7;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e3c72, #2a5298);
+    color: #fff;
+    padding: 25px 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    margin: 15px 0;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* MAIN CONTENT */
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.modules-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.module-card {
+    width: 220px;
+    padding: 20px;
+    border-radius: 12px;
+    color: #fff;
+    text-align: center;
+    background: radial-gradient(circle at 30% 30%, var(--start), var(--end));
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.module-card:hover {
+    transform: translateY(-5px);
+}
+
+.module-card button {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #fff;
+    color: #1e3c72;
+    font-weight: bold;
+}
+
+/* Optional back button (if you add it) */
+.back-button {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(59, 130, 246, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2rem;
+    padding: 0.5rem 1.2rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    z-index: 100;
+}
+.back-button:hover {
+    background: #3b82f6;
+    transform: translateX(-3px);
+}

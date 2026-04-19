@@ -256,6 +256,109 @@ body {
     animation: spin 0.8s linear infinite;
 }
 
+/* ===== FORMAL MESSAGE STYLES ===== */
+.error-message {
+    background: rgba(220, 38, 38, 0.15);
+    border-left: 4px solid #ef4444;
+    color: #fecaca;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    backdrop-filter: blur(4px);
+}
+
+.success-message {
+    background: rgba(34, 197, 94, 0.15);
+    border-left: 4px solid #4ade80;
+    color: #bbf7d0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    backdrop-filter: blur(4px);
+}
+
+.code-box {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid #facc15;
+    color: #fde047;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+    backdrop-filter: blur(8px);
+}
+
+
+/* ===== BUTTON STYLES (Formal & Consistent) ===== */
+
+/* General button styling for all buttons */
+button, 
+.back-button,
+.signup-form button,
+.signup-form input[type="submit"],
+.signup-form a.back-button {
+    display: inline-block;
+    background: var(--accent);
+    color: #666;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Back button specific (positioned top-left) */
+.back-button {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(59, 130, 246, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.5rem 1.2rem;
+    z-index: 100;
+    color:#ffffff;
+}
+
+.back-button:hover {
+    background: var(--accent);
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Form buttons */
+.signup-form button,
+.signup-form input[type="submit"] {
+    width: 100%;
+    margin-top: 1rem;
+    background: var(--accent);
+}
+
+.signup-form button:hover,
+.signup-form input[type="submit"]:hover {
+    background: var(--accent-subtle);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.signup-form button:active,
+.signup-form input[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+/* "Send Verification Code" button can be full width or inline? Keep full width for consistency */
+
 @keyframes spin {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }

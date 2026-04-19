@@ -1,97 +1,214 @@
-/* Full page body */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    background-image: url('https://images.unsplash.com/photo-1531219432768-9ae487545f12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+/* ===== STUDENT SPHERE - ELEGANT LOGIN ===== */
+:root {
+    --accent: #3b82f6;
+    --accent-subtle: #60a5fa;
+    --accent-glow: rgba(59, 130, 246, 0.3);
+    --card-bg: rgba(15, 23, 42, 0.75);
+    --text-light: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-light: rgba(255, 255, 255, 0.1);
 }
 
-/* Container for login card */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, 'Segoe UI', -apple-system, sans-serif;
+    min-height: 100vh;
+    background-image: url('login_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Subtle dark overlay – no color, just depth */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 0;
+    pointer-events: none;
+}
+
 .login-container {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 1;
 }
 
-/* The white card */
+/* Card – clean glass, no rainbow */
 .login-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px;
-    border-radius: 12px;
-    width: 400px;
-    box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    padding: 2.8rem 2.2rem;
+    border-radius: 2rem;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: slideUp 0.5s ease-out;
 }
 
-/* Heading */
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.5);
+}
+
+/* Heading – simple, elegant */
 .login-card h2 {
-    font-size: 28px;
-    color: #2980b9;
-    text-shadow: 1px 1px 2px #bdc3c7;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-light);
+    letter-spacing: -0.3px;
+    margin-bottom: 2rem;
+    position: relative;
 }
 
-/* Input fields */
-.login-card input {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 16px;
+/* Minimal underline – one color, no pulse */
+.login-card h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: var(--accent);
+    margin: 0.6rem auto 0;
+    border-radius: 2px;
 }
 
-/* Login buttons */
+/* Input fields – clean, no neon */
+.login-card input[type="text"],
+.login-card input[type="password"] {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    margin: 0.75rem 0;
+    border-radius: 1rem;
+    border: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.login-card input::placeholder {
+    color: var(--text-muted);
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Buttons – single accent color, no gradient shift */
 .login-card button {
-    padding: 12px;
-    margin: 8px 0;
-    width: 90%;
-    color: white;
+    width: 100%;
+    padding: 0.9rem;
+    margin: 0.75rem 0;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease; /* smooth transition for glow */
+    transition: all 0.2s;
+    color: white;
 }
 
-/* Button colors by ID */
 #studentBtn {
-    background-color: #8e44ad; /* vibrant purple */
+    background: #2563eb;
 }
-
 #mentorBtn {
-    background-color: #16a085; /* teal */
+    background: #0f766e;
 }
-
 #lecturerBtn {
-    background-color: #d35400; /* warm orange */
+    background: #c2410c;
 }
 
-/* Glow effect on hover */
-#studentBtn:hover {
-    box-shadow: 0 0 15px #8e44ad, 0 0 25px #8e44ad;
+/* Hover – subtle lift, no scale explosion */
+.login-card button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+.login-card button:active {
+    transform: translateY(1px);
 }
 
-#mentorBtn:hover {
-    box-shadow: 0 0 15px #16a085, 0 0 25px #16a085;
+/* Back button – minimal */
+.login-card input[type="submit"][value="← Back"] {
+    width: auto;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+    border-radius: 2rem;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.login-card input[type="submit"][value="← Back"]:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(-4px);
+    color: var(--text-light);
 }
 
-#lecturerBtn:hover {
-    box-shadow: 0 0 15px #d35400, 0 0 25px #d35400;
-}
-
-/* Register link */
+/* Register link – clean */
 .login-card p {
-    margin-top: 16px;
-    font-size: 14px;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.login-card p a {
+    color: var(--accent-subtle);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.login-card p a:hover {
+    color: white;
+    text-decoration: underline;
 }
 
-.login-card p a {
-    color: #2980b9;
-    font-weight: bold;
-    text-decoration: none;
+/* Responsive */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 2rem 1.5rem;
+    }
+    .login-card h2 {
+        font-size: 1.6rem;
+    }
 }
