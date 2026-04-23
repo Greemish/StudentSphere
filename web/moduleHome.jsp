@@ -1,230 +1,432 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%
+    if (session.getAttribute("lecturerid") == null) {
+        response.sendRedirect("lecturerLogin.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module - ${currentModuleId}</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${moduleName} - Module Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #3498db; --danger: #e74c3c; --success: #27ae60; --bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); margin: 0; padding: 40px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .section { display: none; }
-        .section.active { display: block; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
 
-        .hub {
-            max-width: 900px;
-            margin: auto;
+        /* Navbar */
+        .navbar {
             background: white;
-            padding: 40px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        .hub-buttons {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 32px;
+            height: 64px;
             display: flex;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #3b82f6;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
             gap: 20px;
-            margin-top: 30px;
         }
 
-        .btn {
-            padding: 14px 28px;
-            border-radius: 8px;
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .logout-btn {
+            background: #f1f5f9;
             border: none;
-            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            color: #64748b;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-back { background: #ecf0f1; color: #555; margin-bottom: 20px; }
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
 
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-    </style>
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
 
-    <!-- ✅ Your original styles stay exactly as-is below -->
-    <style>
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 24px;
+        }
 
-        .header-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        .btn-back-link { text-decoration: none; color: var(--primary); font-weight: bold; font-size: 0.9rem; }
+        .breadcrumb a {
+            color: #64748b;
+            font-size: 13px;
+            text-decoration: none;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-        th { background-color: #f8f9fa; color: #666; text-transform: uppercase; font-size: 0.8rem; }
+        .breadcrumb a:hover {
+            color: #3b82f6;
+        }
 
-        .file-type { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; color: white; }
-        .pdf { background: #e74c3c; }
-        .zip { background: #f1c40f; color: #333; }
-        .doc { background: #2980b9; }
-        .default-type { background: #95a5a6; }
+        .breadcrumb span {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0 8px;
+        }
 
-        .actions-footer { margin-top: 40px; display: flex; gap: 15px; padding-top: 20px; border-top: 1px solid #eee; }
+        .breadcrumb .current {
+            color: #334155;
+            font-weight: 500;
+        }
 
-        .btn-add { background: var(--success); color: white; }
-        .btn-remove { background: #ecf0f1; color: #7f8c8d; }
-        .btn-delete-row { color: var(--danger); font-size: 0.85rem; text-decoration: none; font-weight: bold; }
+        /* Module Header */
+        .module-header {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
 
-        .delete-col { display: none; }
+        .module-code-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #eef2ff;
+            color: #3b82f6;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .module-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .module-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .module-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .module-stat strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 28px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .card-body {
+            padding: 20px 24px;
+        }
+
+        .card-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #f1f5f9;
+            background: #fafbfc;
+        }
+
+        /* Item Lists */
+        .item-list {
+            list-style: none;
+        }
+
+        .item-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .item-list li:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .item-meta {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .item-message {
+            font-size: 13px;
+            color: #475569;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        /* Quick Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
     </style>
 </head>
-
 <body>
 
-<!-- ================= MODULE HUB ================= -->
-<div id="hub" class="section active">
-    <div class="hub">
-        <h1>Module: ${currentModuleId}</h1>
-        <p>What would you like to manage?</p>
-
-        <div class="hub-buttons">
-            <button class="btn btn-primary" onclick="showSection('management')">
-                Module Management
-            </button>
-            <button class="btn btn-success" onclick="showSection('announcements')">
-                Announcements
-            </button>
+    <nav class="navbar">
+        <a href="LectureDashboardServlet" class="logo">Student<span>Sphere</span></a>
+        <div class="user-info">
+            <span class="user-name">${sessionScope.name}</span>
+            <a href="LogoutServlet" class="logout-btn">Sign out</a>
         </div>
-    </div>
-</div>
-
-<!-- ================= MODULE MANAGEMENT (YOUR ORIGINAL LAYOUT) ================= -->
-<div id="management" class="section">
-    <button class="btn btn-back" onclick="goBack()">← Back</button>
-
-    <!-- ✅ YOUR PAGE STARTS HERE (layout unchanged) -->
-    <div class="container">
-        <div class="header-section">
-            <div>
-                <a href="#" class="btn-back-link">Content Management</a>
-                <h1 style="margin: 10px 0 0 0;">Module: ${currentModuleId}</h1>
-            </div>
-            <span style="color: #95a5a6;">Content Management</span>
-        </div>
-
-        <table>
-            <thead>
-            <tr>
-                <th>Date Added</th>
-                <th>File Name</th>
-                <th>Format</th>
-                <th>Access</th>
-                <th class="delete-col">Admin</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="file" items="${contentList}">
-                <tr>
-                    <td>${file.date}</td>
-                    <td style="font-weight: 500;">${file.fileName}</td>
-                    <td>
-                        <span class="file-type">
-                            ${file.type}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="${file.url}" target="_blank" class="btn-back-link">Download</a>
-                    </td>
-                    <td class="delete-col">
-                        <a href="DeleteContentServlett?id=${file.id}&moduleid=${currentModuleId}"
-                           class="btn-delete-row"
-                           onclick="return confirm('Permanent delete: Are you sure?')">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-
-        <div class="actions-footer">
-            <a href="uploadForm.jsp?moduleid=${currentModuleId}" class="btn btn-add">+ Add Content</a>
-            <button type="button" class="btn btn-remove" onclick="toggleDeleteMode()">Manage / Remove Content</button>
-        </div>
-    </div>
-</div>
-
-<!-- ================= ANNOUNCEMENTS ================= -->
-<div id="announcements" class="section">
-    <button class="btn btn-back" onclick="goBack()">← Back</button>
+    </nav>
 
     <div class="container">
-
-        <!-- Header -->
-        <div class="header-section">
-            <div>
-                <h1 style="margin:0;">Create Announcement</h1>
-                <p style="margin:6px 0 0; color:#95a5a6;">
-                    Post an update that all students in this module can see
-                </p>
-            </div>
-            <span style="color:#95a5a6;">Announcements</span>
+        <div class="breadcrumb">
+            <a href="LectureDashboardServlet">Dashboard</a>
+            <span>/</span>
+            <a href="LectureDashboardServlet">My Modules</a>
+            <span>/</span>
+            <span class="current">${moduleCode}</span>
         </div>
 
-        <!-- ✅ FIXED FORM -->
-        <form action="CreateAnnouncementServlet" method="post">
+        <div class="module-header">
+            <span class="module-code-badge">${moduleCode}</span>
+            <h1>${moduleName}</h1>
+            <div class="module-stats">
+                <div class="module-stat"><strong>${studentCount}</strong> Enrolled Students</div>
+                <div class="module-stat"><strong>${quizCount}</strong> Quizzes</div>
+                <div class="module-stat"><strong>${contentPreview.size()}</strong> Resources</div>
+            </div>
+        </div>
 
-            <!-- 🔥 FIX: Use URL parameter instead of null attribute -->
-            <input type="hidden" name="moduleid" value="${param.moduleid}" />
-
-            <!-- Title -->
-            <div style="margin-bottom:20px;">
-                <label style="font-weight:600; display:block; margin-bottom:8px;">
-                    Announcement Title
-                </label>
-                <input type="text"
-                       name="title"
-                       required
-                       placeholder="e.g. Test postponed, New material uploaded"
-                       style="width:100%; padding:14px; border-radius:8px; border:1px solid #ccc;">
+        <div class="dashboard-grid">
+            
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Quick Actions</h2>
+                </div>
+                <div class="card-body">
+                    <div class="actions-grid">
+                        <a href="CreateAnnouncementServlet?moduleid=${currentModuleId}" class="btn btn-primary btn-sm">Post Announcement</a>
+                        <a href="ModuleContentServlett?moduleid=${currentModuleId}" class="btn btn-outline btn-sm">Manage Content</a>
+                        <a href="ViewStudentsServlet?moduleid=${currentModuleId}" class="btn btn-outline btn-sm">View Students</a>
+                        <a href="ManageQuizzesServlet?moduleid=${currentModuleId}" class="btn btn-outline btn-sm">Manage Quizzes</a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Message -->
-            <div style="margin-bottom:25px;">
-                <label style="font-weight:600; display:block; margin-bottom:8px;">
-                    Announcement Message
-                </label>
-                <textarea name="message"
-                          rows="7"
-                          required
-                          placeholder="Write the announcement message here..."
-                          style="width:100%; padding:14px; border-radius:8px; border:1px solid #ccc; resize:vertical;"></textarea>
+            <!-- Recent Announcements Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Announcements</h2>
+                </div>
+                <div class="card-body">
+                    <c:choose>
+                        <c:when test="${not empty announcementList}">
+                            <ul class="item-list">
+                                <c:forEach var="ann" items="${announcementList}">
+                                    <li>
+                                        <div class="item-title">${ann.title}</div>
+                                        <div class="item-meta">Posted on ${ann.date}</div>
+                                        <div class="item-message">${ann.message}</div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="empty-state">
+                                No announcements yet. Click "Post Announcement" to create one.
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div class="card-footer">
+                    <a href="CreateAnnouncementServlet?moduleid=${currentModuleId}" class="btn btn-primary btn-block">+ New Announcement</a>
+                </div>
             </div>
 
-            <!-- Actions -->
-            <div class="actions-footer">
-                <button type="submit" class="btn btn-add">
-                    Post Announcement
-                </button>
+            <!-- Recent Resources Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Resources</h2>
+                </div>
+                <div class="card-body">
+                    <c:choose>
+                        <c:when test="${not empty contentPreview}">
+                            <ul class="item-list">
+                                <c:forEach var="res" items="${contentPreview}">
+                                    <li>
+                                        <div class="item-title">${res.fileName}</div>
+                                        <div class="item-meta">${res.fileType} • ${res.chapter}</div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="empty-state">
+                                No resources uploaded yet. Click "Manage Content" to add files.
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div class="card-footer">
+                    <a href="ModuleContentServlett?moduleid=${currentModuleId}" class="btn btn-outline btn-block">Manage Resources</a>
+                </div>
             </div>
-        </form>
 
+            <!-- Student Progress Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Student Progress</h2>
+                </div>
+                <div class="card-body">
+                    <div class="empty-state">
+                        View and track student performance, grades, and quiz results.
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="ViewStudentsServlet?moduleid=${currentModuleId}" class="btn btn-outline btn-block">View Student List</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-<script>
-    function showSection(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function goBack() {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById('hub').classList.add('active');
-    }
-
-    let deleteMode = false;
-    function toggleDeleteMode() {
-        deleteMode = !deleteMode;
-        document.querySelectorAll('.delete-col')
-            .forEach(col => col.style.display = deleteMode ? 'table-cell' : 'none');
-    }
-</script>
 
 </body>
 </html>
