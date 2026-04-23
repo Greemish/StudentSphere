@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <!-- Student Servlets -->
     <servlet>
         <servlet-name>SignupServlet</servlet-name>
         <servlet-class>student.SignupServlet</servlet-class>
@@ -16,6 +17,7 @@
         <servlet-name>ModuleMessagesServlet</servlet-name>
         <servlet-class>student.ModuleMessagesServlet</servlet-class>
     </servlet>
+    <!-- Lecturer Servlets - Keeping only the ones with two t's (Servlett) -->
     <servlet>
         <servlet-name>lecturerLoginServlett</servlet-name>
         <servlet-class>lecturer.lecturerLoginServlett</servlet-class>
@@ -40,6 +42,19 @@
         <servlet-name>CreateAnnouncementServlet</servlet-name>
         <servlet-class>lecturer.CreateAnnouncementServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LecturerMessagesServlet</servlet-name>
+        <servlet-class>lecturer.LecturerMessagesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleHomeServlet</servlet-name>
+        <servlet-class>lecturer.ModuleHomeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewStudentsServlet</servlet-name>
+        <servlet-class>lecturer.ViewStudentsServlet</servlet-class>
+    </servlet>
+    <!-- Student Servlet Mappings -->
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/SignupServlet</url-pattern>
@@ -56,46 +71,7 @@
         <servlet-name>ModuleMessagesServlet</servlet-name>
         <url-pattern>/ModuleMessagesServlet</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>DeleteContentServlet</servlet-name>
-        <servlet-class>lecturer.DeleteContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DeleteContentServlet</servlet-name>
-        <url-pattern>/deleteContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>LectureDashboardServlet</servlet-name>
-        <servlet-class>lecturer.LectureDashboardServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LectureDashboardServlet</servlet-name>
-        <url-pattern>/lectureDashboard</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>ModuleContentServlet</servlet-name>
-        <servlet-class>lecturer.ModuleContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ModuleContentServlet</servlet-name>
-        <url-pattern>/moduleContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>UploadContentServlet</servlet-name>
-        <servlet-class>lecturer.UploadContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UploadContentServlet</servlet-name>
-        <url-pattern>/uploadContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>lecturerLoginServlet</servlet-name>
-        <servlet-class>lecturer.lecturerLoginServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>lecturerLoginServlet</servlet-name>
-        <url-pattern>/lecturerLogin</url-pattern>
-    </servlet-mapping>
+    <!-- Lecturer Servlet Mappings - All with two t's -->
     <servlet-mapping>
         <servlet-name>lecturerLoginServlett</servlet-name>
         <url-pattern>/lecturerLoginServlett</url-pattern>
@@ -120,4 +96,20 @@
         <servlet-name>CreateAnnouncementServlet</servlet-name>
         <url-pattern>/CreateAnnouncementServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LecturerMessagesServlet</servlet-name>
+        <url-pattern>/LecturerMessagesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleHomeServlet</servlet-name>
+        <url-pattern>/ModuleHomeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewStudentsServlet</servlet-name>
+        <url-pattern>/ViewStudentsServlet</url-pattern>
+    </servlet-mapping>
+    <!-- Welcome Page -->
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

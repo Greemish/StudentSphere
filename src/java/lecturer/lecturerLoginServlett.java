@@ -19,11 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import student.DBConnection;
 
-/**
- *
- * @author Phomolo
- */
-@WebServlet(urlPatterns = {"/lecturerLoginServlet"})
+//@WebServlet(urlPatterns = {"/lecturerLoginServlett"})
 public class lecturerLoginServlett extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -46,17 +42,15 @@ public class lecturerLoginServlett extends HttpServlet {
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, lecturerid);
-            ps.setString(2, password); // Note: In production, verify hashed password!
+            ps.setString(2, password);
 
-            // Execute the query
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 // Lecturer found - login successful
                 HttpSession session = request.getSession();
-                session.setAttribute("lecturerid", rs.getString("lecturerid"));
+                session.setAttribute("lecturerid", rs.getInt("lecturerid"));
                 session.setAttribute("name", rs.getString("name"));
-                //session.setAttribute("surname", rs.getString("surname"));
                 session.setAttribute("email", rs.getString("email"));
                 session.setAttribute("role", "lecturer");
                 
@@ -68,18 +62,12 @@ public class lecturerLoginServlett extends HttpServlet {
                 
             } else {
                 // Lecturer not found - login failed
-                request.setAttribute("error", "Invalid student number or password. Please try again.");
-                
-                RequestDispatcher disp = request.getRequestDispatcher("lecturerDashboard.jsp");
-                disp.forward(request, response);
+                response.sendRedirect("lecturerLogin.jsp?error=1");
             }
 
         } catch (Exception e) {
-        e.printStackTrace();
-
-            PrintWriter out = response.getWriter();
-            out.println("<h1 style= \"color:red \">Database Error</h1>");
-            out.println("<h2>" + e.getMessage() + "</h2>");
+            e.printStackTrace();
+            response.sendRedirect("lecturerLogin.jsp?error=1");
 
         } finally {
             try {
