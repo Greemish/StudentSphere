@@ -1,6 +1,5 @@
 package ai;
-
-
+import javax.net.ssl.HttpsURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,22 +9,39 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
-import java.util.List;
-
-
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+import java.security.SecureRandom;
 
 public class AIService {
     
-    private static final String API_KEY = "AIzaSyBVnOC4J8OfQjiDBtDmMrxda8P5AqUQKag"; 
-    
-   
+    private static final String API_KEY = "AIzaSyD76KPh5CRfuDgGKtoRFZziTIyPNWoRiSE"; 
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + API_KEY;
 
-    private static final String instructions =
-        "You are an educational assistant. Analyze the provided text and identify between 3 and 7 distinct topics covered. "
+    // SSL Bypass for development - ADD THIS BLOCK
+    static {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() { return null; }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+                }
+            };
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            SSLContext.setDefault(sc);
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String instructions = "You are an educational assistant. Analyze the provided text and identify between 3 and 7 distinct topics covered. "
       + "For each topic, generate exactly five multiple-choice questions with four labeled options (A, B, C, D) and a single correct answer.\n\n"
       + "Requirements:\n"
       + "- Topics: Return 3–7 topics depending on how much content is available. Do not invent topics not supported by the text.\n"
@@ -53,24 +69,23 @@ public class AIService {
       + "  }\n"
       + "]\n\n"
       + "- No commentary: Do not include explanations, notes, or text outside the JSON.\n"
-      + "- Validity: Ensure the JSON is valid and parsable, with no trailing commas or ellipses.\n"+"please pay attention to the results i get on this topic so you adapt to my and measure my progress to send me questions that i struggle with";
+      + "- Validity: Ensure the JSON is valid and parsable, with no trailing commas or ellipses.\n"
+      + "please pay attention to the results i get on this topic so you adapt to my and measure my progress to send me questions that i struggle with";
 
- 
+    // Add this import at top: import java.net.http.HttpClient;
+    // And this: import java.net.http.HttpRequest;
+    // And this: import java.net.http.HttpResponse;
+
     public String getProcessedJson(String content) {
-        // Step 1: Get the messy response from the API
         String rawData = generateQuizJson(content);
-        
-        // Step 2: If we got a response, clean it using your other method
         if (rawData != null) {
             return getCleanJson(rawData);
         }
-        
         return null;
     }
 
     public String generateQuizJson(String content) {
         try {
-      
             JsonObject generationConfig = new JsonObject();
             generationConfig.addProperty("response_mime_type", "application/json");
 
@@ -90,11 +105,10 @@ public class AIService {
             requestBody.add("contents", contents);
             requestBody.add("generationConfig", generationConfig);
 
-            // Convert object back to a string for the HTTP Request
             String jsonRequest = requestBody.toString();
 
             HttpClient client = HttpClient.newBuilder()
-                    .connectTimeout(Duration.ofSeconds(10))
+                    .connectTimeout(Duration.ofSeconds(30))
                     .build();
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -103,7 +117,7 @@ public class AIService {
                     .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                     .build();
 
-            System.out.println("Sending request to Gemini 2.5 Flash...");
+            System.out.println("Sending request to Gemini API...");
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             
             System.out.println("HTTP Status Code: " + response.statusCode());
@@ -132,12 +146,12 @@ public class AIService {
                              .get(0).getAsJsonObject()
                              .get("text").getAsString();
         } catch (Exception e) {
+            System.err.println("Error cleaning JSON: " + e.getMessage());
             return null;
         }
     }
     
-    // NEW: parse JSON with Gson and save to DB
     public void saveToDatabase(String cleanJson, long moduleContentId) {
-        
-}
+        // Implementation here
+    }
 }

@@ -1,5 +1,8 @@
 package student;
 
+import ai.AIService;
+import ai.ContentExtractor;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
@@ -9,16 +12,36 @@ import jakarta.servlet.http.*;
 
 
 public class TakeQuizServlet extends HttpServlet {
+    
+    // CHANGE THIS TO YOUR PDF URL
+    private static final String PDF_URL = "https://bosjudubjyevfcesromc.storage.supabase.co/storage/v1/object/public/moduleContent/LU2%20-%20SDLC.pdf";
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession();
         String studentNumber = (String) session.getAttribute("studentNumber");
         if (studentNumber == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-
+        
+        // Check if this is an AI quiz request
+        String type = request.getParameter("type");
+        
+        if ("ai".equals(type)) {
+            // Generate AI quiz from PDF
+            generateAIQuiz(request, response);
+        } else {
+            // Original: Show existing quizzes from database
+            showExistingQuizzes(request, response, studentNumber);
+        }
+    }
+    
+    private void showExistingQuizzes(HttpServletRequest request, HttpServletResponse response, String studentNumber)
+            throws ServletException, IOException {
+        
         List<Map<String, String>> quizzes = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT q.id, q.title, q.description, m.module_name " +
@@ -42,5 +65,38 @@ public class TakeQuizServlet extends HttpServlet {
         }
         request.setAttribute("quizzes", quizzes);
         request.getRequestDispatcher("takeQuiz.jsp").forward(request, response);
+    }
+    
+    private void generateAIQuiz(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        
+        try {
+            ContentExtractor extractor = new ContentExtractor();
+            String extractedText = extractor.extractTextFromUrl(PDF_URL);
+            
+            if (extractedText == null || extractedText.isEmpty()) {
+                request.setAttribute("error", "Failed to extract text from PDF");
+                request.getRequestDispatcher("takeQuiz.jsp").forward(request, response);
+                return;
+            }
+            
+            AIService aiService = new AIService();
+            String rawResponse = aiService.generateQuizJson(extractedText);
+            String cleanQuizJson = aiService.getCleanJson(rawResponse);
+            
+            Gson gson = new Gson();
+            List<Map<String, Object>> topics = gson.fromJson(cleanQuizJson, List.class);
+            
+            session.setAttribute("aiQuiz", topics);
+            request.setAttribute("isAIQuiz", true);
+            request.getRequestDispatcher("takeQuiz.jsp").forward(request, response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "AI Error: " + e.getMessage());
+            request.getRequestDispatcher("takeQuiz.jsp").forward(request, response);
+        }
     }
 }
