@@ -14,7 +14,7 @@ import jakarta.servlet.http.*;
 public class TakeQuizServlet extends HttpServlet {
     
     // CHANGE THIS TO YOUR PDF URL
-    private static final String PDF_URL = "https://bosjudubjyevfcesromc.storage.supabase.co/storage/v1/object/public/moduleContent/LU2%20-%20SDLC.pdf";
+    private static final String PDF_URL = "https://bosjudubjyevfcesromc.supabase.co/storage/v1/object/public/moduleContent/LU-3%20Software%20Project%20Management1.pdf";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

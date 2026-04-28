@@ -18,7 +18,7 @@ import java.security.SecureRandom;
 
 public class AIService {
     
-    private static final String API_KEY = "AIzaSyD76KPh5CRfuDgGKtoRFZziTIyPNWoRiSE"; 
+    private static final String API_KEY = "AIzaSyADxH7omt9kehDX64d5JPcNdH24ByN1_To"; 
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + API_KEY;
 
     // SSL Bypass for development - ADD THIS BLOCK
@@ -154,4 +154,85 @@ public class AIService {
     public void saveToDatabase(String cleanJson, long moduleContentId) {
         // Implementation here
     }
+    
+public String generateAdaptiveQuiz(String content, String weakTopics) {
+    String adaptiveInstructions = 
+        "You are an educational assistant providing ADAPTIVE learning. " +
+        "The student has previously struggled with these specific topics: " + weakTopics + ". " +
+        "Generate a quiz that focuses ONLY on these weak topics to help them improve. " +
+        "Create exactly 5 multiple-choice questions total, all related to the weak topics listed. " +
+        "Make the questions slightly easier to build confidence, but still educational. " +
+        "Use this exact JSON format with no extra text:\n\n" +
+        "[\n" +
+        "  {\n" +
+        "    \"topic\": \"Topic name (one of the weak topics)\",\n" +
+        "    \"quizzes\": [\n" +
+        "      {\n" +
+        "        \"question\": \"Question text\",\n" +
+        "        \"options\": {\n" +
+        "          \"A\": \"Option A\",\n" +
+        "          \"B\": \"Option B\",\n" +
+        "          \"C\": \"Option C\",\n" +
+        "          \"D\": \"Option D\"\n" +
+        "        },\n" +
+        "        \"answer\": \"A\"\n" +
+        "      }\n" +
+        "    ]\n" +
+        "  }\n" +
+        "]\n\n" +
+        "Return ONLY valid JSON. No explanations, no extra text.";
+    
+    try {
+        com.google.gson.JsonObject generationConfig = new com.google.gson.JsonObject();
+        generationConfig.addProperty("response_mime_type", "application/json");
+
+        com.google.gson.JsonObject textPart = new com.google.gson.JsonObject();
+        textPart.addProperty("text", adaptiveInstructions + "\n\nContent: " + content);
+
+        com.google.gson.JsonArray parts = new com.google.gson.JsonArray();
+        parts.add(textPart);
+
+        com.google.gson.JsonObject contentNode = new com.google.gson.JsonObject();
+        contentNode.add("parts", parts);
+
+        com.google.gson.JsonArray contents = new com.google.gson.JsonArray();
+        contents.add(contentNode);
+
+        com.google.gson.JsonObject requestBody = new com.google.gson.JsonObject();
+        requestBody.add("contents", contents);
+        requestBody.add("generationConfig", generationConfig);
+
+        String jsonRequest = requestBody.toString();
+
+        java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
+                .connectTimeout(java.time.Duration.ofSeconds(60))
+                .build();
+
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(API_URL))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        System.out.println("Sending ADAPTIVE quiz request to AI...");
+        System.out.println("Focusing on weak topics: " + weakTopics);
+        
+        java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+        
+        System.out.println("HTTP Status Code: " + response.statusCode());
+        
+        if (response.statusCode() != 200) {
+            System.err.println("API Error Response: " + response.body());
+            return null;
+        }
+        
+        String rawResponse = response.body();
+        return getCleanJson(rawResponse);
+        
+    } catch (Exception e) {
+        System.err.println("Exception during adaptive API call:");
+        e.printStackTrace();
+        return null;
+    }
+}
 }
