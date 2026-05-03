@@ -32,12 +32,12 @@ public class DeleteContentServlett extends HttpServlet {
         
         // Validate parameters
         if (contentIdParam == null || contentIdParam.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
         if (moduleIdParam == null || moduleIdParam.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -69,7 +69,7 @@ public class DeleteContentServlett extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         

@@ -39,7 +39,7 @@ public class UploadContentServlett extends HttpServlet {
         
         // Validate inputs
         if (moduleId == null || moduleId.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -78,7 +78,7 @@ public class UploadContentServlett extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         

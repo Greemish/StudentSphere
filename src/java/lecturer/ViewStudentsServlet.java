@@ -29,7 +29,7 @@ public class ViewStudentsServlet extends HttpServlet {
         String moduleIdParam = request.getParameter("moduleid");
         
         if (moduleIdParam == null || moduleIdParam.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -37,7 +37,7 @@ public class ViewStudentsServlet extends HttpServlet {
         try {
             moduleId = Integer.parseInt(moduleIdParam);
         } catch (NumberFormatException e) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -58,7 +58,7 @@ public class ViewStudentsServlet extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -96,8 +96,11 @@ public class ViewStudentsServlet extends HttpServlet {
             request.setAttribute("moduleName", moduleName);
             request.setAttribute("students", getStudentsByModule(conn, moduleId));
             request.setAttribute("tutors", getTutorsByModule(conn, moduleId));
-            
-            request.getRequestDispatcher("viewStudents.jsp?" + successParam).forward(request, response);
+            if (!successParam.isEmpty()) {
+                request.setAttribute("successParam", successParam.substring(1)); // strip leading "&"
+            }
+
+            request.getRequestDispatcher("viewStudents.jsp").forward(request, response);
             
         } catch (Exception e) {
             e.printStackTrace();

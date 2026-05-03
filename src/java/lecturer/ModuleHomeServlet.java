@@ -36,47 +36,34 @@ public class ModuleHomeServlet extends HttpServlet {
         
         int lecturerId = (int) session.getAttribute("lecturerid");
         
-        // Get modulecode instead of moduleid
+        // Accept either moduleid (integer) or modulecode (string)
         String moduleCode = request.getParameter("modulecode");
+        String moduleIdParam = request.getParameter("moduleid");
         
-        if (moduleCode == null || moduleCode.trim().isEmpty()) {
+        if ((moduleCode == null || moduleCode.trim().isEmpty()) && (moduleIdParam == null || moduleIdParam.trim().isEmpty())) {
             response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
-        // AUTHORIZATION CHECK COMMENTED OUT FOR NOW
-        /*
-        String verifySql = "SELECT 1 FROM lecturer_modules WHERE lecturerid = ? AND moduleid = ?";
-        boolean isAuthorized = false;
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(verifySql)) {
-            ps.setInt(1, lecturerId);
-            ps.setString(2, moduleCode);
-            ResultSet rs = ps.executeQuery();
-            isAuthorized = rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlett");
-            return;
-        }
-        */
-        
-        // Get module details using module_code
+        // Get module details - look up by id or code
         String moduleName = "";
         String moduleId = "";
         String moduleColor = "#3b82f6";
         
-        String moduleSql = "SELECT id, module_code, module_name, colour FROM modules WHERE module_code = ?";
+        String moduleSql = moduleIdParam != null && !moduleIdParam.trim().isEmpty()
+            ? "SELECT id, module_code, module_name, colour FROM modules WHERE id = ?"
+            : "SELECT id, module_code, module_name, colour FROM modules WHERE module_code = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(moduleSql)) {
-            ps.setString(1, moduleCode);
+            if (moduleIdParam != null && !moduleIdParam.trim().isEmpty()) {
+                ps.setInt(1, Integer.parseInt(moduleIdParam));
+            } else {
+                ps.setString(1, moduleCode);
+            }
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 moduleId = rs.getString("id");
+                moduleCode = rs.getString("module_code");
                 moduleName = rs.getString("module_name");
                 String color = rs.getString("colour");
                 if (color != null && !color.trim().isEmpty()) {
@@ -86,7 +73,12 @@ public class ModuleHomeServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
+        // Guard: if module not found, redirect back to dashboard
+        if (moduleId.isEmpty()) {
+            response.sendRedirect("LectureDashboardServlett");
+            return;
+        }
         List<Map<String, String>> announcementList = new ArrayList<>();
         List<Map<String, String>> previewContent = new ArrayList<>();
         int studentCount = 0;
@@ -114,10 +106,10 @@ public class ModuleHomeServlet extends HttpServlet {
                 }
             }
             
-            // Get limited content for preview - module_content uses moduleid as TEXT (module_code)
+            // Get limited content for preview - module_content uses moduleid as the integer module id
             String previewSql = "SELECT id, file_url, file_type, chapter FROM module_content WHERE moduleid = ? ORDER BY created_at DESC LIMIT 5";
             try (PreparedStatement ps = conn.prepareStatement(previewSql)) {
-                ps.setString(1, moduleCode);
+                ps.setInt(1, Integer.parseInt(moduleId));
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Map<String, String> item = new HashMap<>();
@@ -135,10 +127,10 @@ public class ModuleHomeServlet extends HttpServlet {
                 }
             }
 
-            // Get Announcements - module_announcements uses moduleid as TEXT (module_code)
+            // Get Announcements - module_announcements uses moduleid as the integer module id
             String announceSql = "SELECT id, heading, announcement, created_at FROM module_announcements WHERE moduleid = ? ORDER BY created_at DESC LIMIT 5";
             try (PreparedStatement ps = conn.prepareStatement(announceSql)) {
-                ps.setString(1, moduleCode);
+                ps.setInt(1, Integer.parseInt(moduleId));
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Map<String, String> a = new HashMap<>();

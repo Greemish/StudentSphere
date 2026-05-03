@@ -36,7 +36,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         String moduleIdParam = request.getParameter("moduleid");
         
         if (moduleIdParam == null || moduleIdParam.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -44,7 +44,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         try {
             moduleId = Integer.parseInt(moduleIdParam);
         } catch (NumberFormatException e) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -65,7 +65,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -141,7 +141,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         
         // Validate inputs
         if (moduleIdParam == null || moduleIdParam.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -149,7 +149,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         try {
             moduleId = Integer.parseInt(moduleIdParam);
         } catch (NumberFormatException e) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -180,7 +180,7 @@ public class LecturerMessagesServlet extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         

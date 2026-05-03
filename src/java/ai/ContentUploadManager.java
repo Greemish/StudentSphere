@@ -60,7 +60,7 @@ public class ContentUploadManager {
         String sql = "INSERT INTO module_content (moduleid, file_url, file_type, extracted_text, chapter) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, moduleId);
+            ps.setInt(1, Integer.parseInt(moduleId));
             ps.setString(2, fileUrl);
             ps.setString(3, "PDF");
             ps.setString(4, text);
