@@ -319,7 +319,7 @@
         <div class="breadcrumb">
             <a href="LectureDashboardServlet">Dashboard</a>
             <span>/</span>
-            <a href="ModuleHomeServlet?moduleid=${moduleId}">${moduleCode}</a>
+            <a href="ModuleHomeServlet?modulecode=${moduleCode}">${moduleCode}</a>
             <span>/</span>
             <span class="current">Students</span>
         </div>
@@ -335,20 +335,16 @@
         </div>
 
         <!-- Success/Error Messages -->
-        <% if (request.getParameter("promote") != null) { %>
-            <% if ("success".equals(request.getParameter("promote"))) { %>
-                <div class="alert alert-success">Student has been promoted to tutor successfully.</div>
-            <% } else if ("error".equals(request.getParameter("promote"))) { %>
-                <div class="alert alert-error">Failed to promote student. They may already be a tutor.</div>
-            <% } %>
+        <% if ("success".equals(request.getAttribute("promoteResult"))) { %>
+            <div class="alert alert-success">Student has been promoted to tutor successfully.</div>
+        <% } else if ("error".equals(request.getAttribute("promoteResult"))) { %>
+            <div class="alert alert-error">Failed to promote student. They may already be a tutor.</div>
         <% } %>
 
-        <% if (request.getParameter("remove") != null) { %>
-            <% if ("success".equals(request.getParameter("remove"))) { %>
-                <div class="alert alert-success">Tutor privileges have been removed.</div>
-            <% } else if ("error".equals(request.getParameter("remove"))) { %>
-                <div class="alert alert-error">Failed to remove tutor privileges.</div>
-            <% } %>
+        <% if ("success".equals(request.getAttribute("removeResult"))) { %>
+            <div class="alert alert-success">Tutor privileges have been removed.</div>
+        <% } else if ("error".equals(request.getAttribute("removeResult"))) { %>
+            <div class="alert alert-error">Failed to remove tutor privileges.</div>
         <% } %>
 
         <!-- Search -->

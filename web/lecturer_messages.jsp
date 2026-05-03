@@ -380,7 +380,7 @@
         <div class="breadcrumb">
             <a href="LectureDashboardServlet">Dashboard</a>
             <span>/</span>
-            <a href="ModuleHomeServlet?moduleid=${moduleId}">${moduleCode}</a>
+            <a href="ModuleHomeServlet?modulecode=${moduleCode}">${moduleCode}</a>
             <span>/</span>
             <span class="current">Messages</span>
         </div>

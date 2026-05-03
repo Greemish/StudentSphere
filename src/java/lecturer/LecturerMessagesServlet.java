@@ -102,8 +102,10 @@ public class LecturerMessagesServlet extends HttpServlet {
             
             while (rs.next()) {
                 Map<String, String> msg = new HashMap<>();
-                String studentName = rs.getString("name") + " " + rs.getString("surname");
-                msg.put("sender", studentName != null && !studentName.trim().isEmpty() ? studentName : "Student");
+                String firstName = rs.getString("name");
+                String lastName = rs.getString("surname");
+                String studentName = ((firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "")).trim();
+                msg.put("sender", !studentName.isEmpty() ? studentName : "Student");
                 msg.put("studentNumber", rs.getString("student_number"));
                 msg.put("text", rs.getString("content"));
                 msg.put("date", rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toString() : "");
@@ -114,7 +116,7 @@ public class LecturerMessagesServlet extends HttpServlet {
             request.setAttribute("moduleId", String.valueOf(moduleId));
             request.setAttribute("moduleCode", moduleCode);
             request.setAttribute("moduleName", moduleName);
-            request.getRequestDispatcher("lecturerMessages.jsp").forward(request, response);
+            request.getRequestDispatcher("lecturer_messages.jsp").forward(request, response);
             
         } catch (Exception e) {
             e.printStackTrace();

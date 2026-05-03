@@ -27,7 +27,7 @@ public class StudentLoginServlet extends HttpServlet {
                 session.setAttribute("studentSurname", rs.getString("surname"));
                 session.setAttribute("studentEmail", rs.getString("email"));
                 session.setAttribute("studentPhone", rs.getString("phone_number"));
-                response.sendRedirect("studentDashboard.jsp");
+                response.sendRedirect("DashboardServlet");
             } else {
                 request.setAttribute("error", "Invalid credentials");
                 request.getRequestDispatcher("login.jsp").forward(request, response);

@@ -64,7 +64,6 @@ public class ViewStudentsServlet extends HttpServlet {
         
         String action = request.getParameter("action");
         String targetStudent = request.getParameter("studentNum");
-        String successParam = "";
         
         try (Connection conn = DBConnection.getConnection()) {
             
@@ -84,10 +83,18 @@ public class ViewStudentsServlet extends HttpServlet {
             // Handle actions
             if ("promote".equals(action) && targetStudent != null && !targetStudent.trim().isEmpty()) {
                 boolean promoted = promoteToTutor(conn, targetStudent, moduleId);
-                successParam = promoted ? "&promote=success" : "&promote=error";
+                if (promoted) {
+                    request.setAttribute("promoteResult", "success");
+                } else {
+                    request.setAttribute("promoteResult", "error");
+                }
             } else if ("remove".equals(action) && targetStudent != null && !targetStudent.trim().isEmpty()) {
                 boolean removed = removeTutor(conn, targetStudent, moduleId);
-                successParam = removed ? "&remove=success" : "&remove=error";
+                if (removed) {
+                    request.setAttribute("removeResult", "success");
+                } else {
+                    request.setAttribute("removeResult", "error");
+                }
             }
             
             // Fetch data
@@ -97,7 +104,7 @@ public class ViewStudentsServlet extends HttpServlet {
             request.setAttribute("students", getStudentsByModule(conn, moduleId));
             request.setAttribute("tutors", getTutorsByModule(conn, moduleId));
             
-            request.getRequestDispatcher("viewStudents.jsp?" + successParam).forward(request, response);
+            request.getRequestDispatcher("viewStudents.jsp").forward(request, response);
             
         } catch (Exception e) {
             e.printStackTrace();

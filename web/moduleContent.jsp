@@ -413,7 +413,7 @@
         <div class="breadcrumb">
             <a href="LectureDashboardServlet">Dashboard</a>
             <span>/</span>
-            <a href="ModuleHomeServlet?moduleid=${currentModuleId}">${moduleCode}</a>
+            <a href="ModuleHomeServlet?modulecode=${moduleCode}">${moduleCode}</a>
             <span>/</span>
             <span class="current">Content Management</span>
         </div>

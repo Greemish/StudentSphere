@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Your Modules</title>
-    <link rel="stylesheet" href="modulesStyle.css">
+    <link rel="stylesheet" href="moduleStyle.css">
     <link rel="stylesheet" href="dashboardStyle.css">
     
 </head>
