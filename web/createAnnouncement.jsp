@@ -269,7 +269,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="LectureDashboardServlet" class="logo">Student<span>Sphere</span></a>
+        <a href="LectureDashboardServlett" class="logo">Student<span>Sphere</span></a>
         <div class="user-info">
             <span class="user-name">${sessionScope.name}</span>
             <a href="LogoutServlet" class="logout-btn">Sign out</a>
@@ -278,7 +278,7 @@
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="LectureDashboardServlet">Dashboard</a>
+            <a href="LectureDashboardServlett">Dashboard</a>
             <span>/</span>
             <a href="ModuleHomeServlet?moduleid=${currentModuleId}">${moduleCode}</a>
             <span>/</span>

@@ -31,7 +31,7 @@ public class CreateAnnouncementServlet extends HttpServlet {
         String moduleId = request.getParameter("moduleid");
         
         if (moduleId == null || moduleId.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -80,7 +80,7 @@ public class CreateAnnouncementServlet extends HttpServlet {
         
         // Validate inputs
         if (moduleId == null || moduleId.trim().isEmpty()) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         
@@ -111,7 +111,7 @@ public class CreateAnnouncementServlet extends HttpServlet {
         }
         
         if (!isAuthorized) {
-            response.sendRedirect("LectureDashboardServlet");
+            response.sendRedirect("LectureDashboardServlett");
             return;
         }
         

@@ -397,7 +397,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="LectureDashboardServlet" class="logo">Student<span>Sphere</span></a>
+        <a href="LectureDashboardServlett" class="logo">Student<span>Sphere</span></a>
         <div class="user-info">
             <span class="user-name">${sessionScope.name}</span>
             <a href="LogoutServlet" class="logout-btn">Sign out</a>
@@ -411,7 +411,7 @@
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="LectureDashboardServlet">Dashboard</a>
+            <a href="LectureDashboardServlett">Dashboard</a>
             <span>/</span>
             <a href="ModuleHomeServlet?moduleid=${currentModuleId}">${moduleCode}</a>
             <span>/</span>
@@ -481,7 +481,7 @@
                     <span style="color: #cbd5e1; margin: 0 8px;">|</span>
                     <a href="DeleteContentServlett?id=${file.id}&moduleid=${currentModuleId}" 
                        class="delete-link" 
-                       accesskey=""onclick="return confirm('Are you sure you want to delete this file? This action cannot be undone.')">Delete</a>
+                       onclick="return confirm('Are you sure you want to delete this file? This action cannot be undone.')">Delete</a>
                 </td>
             </tr>
         </c:forEach>

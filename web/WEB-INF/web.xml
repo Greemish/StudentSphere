@@ -72,46 +72,7 @@
         <servlet-name>ModuleMessagesServlet</servlet-name>
         <url-pattern>/ModuleMessagesServlet</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>DeleteContentServlet</servlet-name>
-        <servlet-class>lecturer.DeleteContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DeleteContentServlet</servlet-name>
-        <url-pattern>/deleteContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>LectureDashboardServlet</servlet-name>
-        <servlet-class>lecturer.LectureDashboardServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LectureDashboardServlet</servlet-name>
-        <url-pattern>/lectureDashboard</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>ModuleContentServlet</servlet-name>
-        <servlet-class>lecturer.ModuleContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ModuleContentServlet</servlet-name>
-        <url-pattern>/moduleContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>UploadContentServlet</servlet-name>
-        <servlet-class>lecturer.UploadContentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UploadContentServlet</servlet-name>
-        <url-pattern>/uploadContent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>lecturerLoginServlet</servlet-name>
-        <servlet-class>lecturer.lecturerLoginServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>lecturerLoginServlet</servlet-name>
-        <url-pattern>/lecturerLogin</url-pattern>
-    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>lecturerLoginServlett</servlet-name>
         <url-pattern>/lecturerLoginServlett</url-pattern>
@@ -159,5 +120,13 @@
     <servlet-mapping>
         <servlet-name>SubmitQuizServlet</servlet-name>
         <url-pattern>/SubmitQuizServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>student.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
 </web-app>

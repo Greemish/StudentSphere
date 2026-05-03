@@ -28,14 +28,14 @@ public class DashboardServlet extends HttpServlet {
             conn = DBConnection.getConnection();
 
             // Prepare and execute query
-            String sql = "SELECT moduleid, module_name, colour FROM modules";
+            String sql = "SELECT id, module_name, colour FROM modules";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
             // Loop through results
             while (rs.next()) {
                 Map<String, String> module = new HashMap<>();
-                module.put("id", rs.getString("moduleid"));
+                module.put("id", rs.getString("id"));
                 module.put("name", rs.getString("module_name"));
                 module.put("colour", rs.getString("colour"));
                 modules.add(module);
